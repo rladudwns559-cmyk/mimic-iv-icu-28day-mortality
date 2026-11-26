@@ -1,0 +1,1 @@
+subject_id,hadm_id,stay_id,intime,prediction_time,outtime,age,gender,death_time,mortality_28d,dod,window_end,horizon_time,death_source,death_date_lower,death_date_upper,label_reason,survival_evidence,survival_confirmed_at,exclusion_reason,data_issue

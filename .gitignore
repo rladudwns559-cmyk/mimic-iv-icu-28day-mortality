@@ -1,0 +1,12 @@
+# MIMIC-IV 제한 데이터와 환자 단위 파생 자료는 올리지 않는다
+data/
+results/
+final-dashboard/outputs/
+*.csv.gz
+*.parquet
+*.ubj
+*.pkl
+*.joblib
+.venv/
+__pycache__/
+.claude/

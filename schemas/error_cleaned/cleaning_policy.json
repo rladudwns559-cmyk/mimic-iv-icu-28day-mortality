@@ -1,0 +1,33 @@
+{
+  "rules": {
+    "HR": [
+      null,
+      500
+    ],
+    "RR": [
+      null,
+      300
+    ],
+    "SBP": [
+      null,
+      1000
+    ],
+    "DBP": [
+      null,
+      1000
+    ],
+    "MAP": [
+      null,
+      1000
+    ],
+    "Temperature": [
+      0,
+      60
+    ]
+  },
+  "boundary": "exclude value < lower or > upper; retain equality",
+  "meaning": "Conservative project-specific gross-error screening; not clinically adjudicated errors or normal ranges.",
+  "lab": "Retain all previously valid lab observations, including extremes.",
+  "zero_vitals": "Preserved; no context-free inference of artifact.",
+  "timing": "Original charttime policy unchanged; late storetime observations remain included."
+}
