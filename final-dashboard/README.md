@@ -7,22 +7,30 @@
 
 ```
 final-dashboard/
-├── CLAUDE.md          규칙 파일
-├── dashboard_core.py  화면 입력 → 모델 입력 150개 변환, 예측, 요인 분석 (train.py와 app.py가 함께 씀)
-├── train.py           최종 모델 재학습 · 팀 기록과 대조 · 대시보드 자료 저장
-├── app.py             대시보드 화면 (모델을 다시 학습하지 않음)
-├── report_extras.py   최종보고서 보강 계산 (표 2·12·13, 그림 6) — 저장된 모델 사용, 비교 모델은 팀 기록과 일치할 때만 사용
-├── requirements.txt   팀 공유본 패키지 + Gradio 6.32.0
-└── outputs/           train.py가 만드는 결과 (팀원 공유 zip에는 화면 캡처와 report_extras/만 들어 있음)
-    ├── model.ubj      학습한 XGBoost
-    ├── metrics.csv    테스트 성능 지표
-    ├── roc.png, pr.png  ROC·PR 곡선 (테스트 4,517명)
-    ├── assets.json    입력 순서·ICU 범주·변수별 분포·보정표·예시 환자 (집계값만, 환자 개인 자료 없음)
-    ├── dashboard_screenshot.png  가상 환자 A(81.8%) 계산 화면 전체 캡처 (보고서 그림 7의 원본)
-    └── report_extras/  report_extras.py 결과: 부트스트랩 신뢰구간·혼동행렬·기본 특성표·10분위 보정표(csv), test_curves.png
+├── CLAUDE.md              규칙 파일
+├── dashboard_core.py      화면 입력 → 모델 입력 150개 변환, 예측, 요인 분석 (train.py와 app.py가 함께 씀)
+├── dashboard_core.js      dashboard_core.py와 같은 규칙의 브라우저용 계산 (HTML 파일용)
+├── train.py               최종 모델 재학습 · 팀 기록과 대조 · 대시보드 자료 저장
+├── app.py                 대시보드 화면 (모델을 다시 학습하지 않음)
+├── build_html.py          팀원 전용 HTML 파일 만들기
+├── report_extras.py       보고서 표 3·표 4·그림 3: 테스트 부트스트랩 95% CI, 기준별 분류표, ROC·PR·보정 곡선
+├── report_tables.py       보고서 표 1·표 2(± SD)·표 5와 결론 숫자
+├── report_model_ci.py     보고서 4.2: 세 모델 비교 차이의 95% CI
+├── report_lactate_ci.py   보고서 4.2: 젖산 수치 vs 측정 여부만 차이의 95% CI
+├── make_schematic.py      보고서 그림 1 연구 모식도
+├── make_flowchart.py      보고서 그림 2 코호트 선정 흐름도
+├── make_test_curves_ko.py 발표자료용 테스트 곡선 (그림 3의 한국어판)
+├── requirements.txt       팀 공유본 패키지 + Gradio 6.32.0
+└── outputs/               위 스크립트가 만드는 결과 (공개 저장소에 올리지 않음)
+    ├── model.ubj          학습한 XGBoost
+    ├── metrics.csv        테스트 성능 지표
+    ├── roc.png, pr.png    ROC·PR 곡선 (테스트 4,517명)
+    ├── assets.json        입력 순서·ICU 범주·변수별 분포·보정표·예시 환자 (집계값만, 환자 개인 자료 없음)
+    ├── dashboard_screenshot.png  가상 환자 A(81.8%) 계산 화면 (보고서 그림 C1의 원본)
+    └── report_extras/     보고서 집계(csv)와 그림
 ```
 
-보고서 보강 계산을 다시 만들려면 `train.py`를 실행한 뒤 `..\.venv\Scripts\python report_extras.py`를 실행합니다(수 분 소요).
+보고서 집계를 다시 만들려면 `train.py`를 실행한 뒤 저장소 README의 순서대로 `report_*.py`와 그림 스크립트를 실행합니다.
 
 ## 실행 순서 (팀원 컴퓨터에서 처음 실행할 때)
 
