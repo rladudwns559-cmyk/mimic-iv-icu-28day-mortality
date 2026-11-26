@@ -4,8 +4,8 @@
 
 **연구 질문.** 성인 환자의 첫 ICU 입실 후 24시간 동안 기록된 정보로 입실 후 28일 이내 사망을 예측할 수 있는가?
 
-> 이 저장소에는 **코드와 실행 방법만** 있습니다. MIMIC-IV 원자료, 환자 단위 파생 자료(코호트·전처리·분할·예측 파일),
-> 학습된 모델 파일은 데이터 이용 협약(DUA)에 따라 올리지 않았습니다.
+> 이 저장소에는 **코드, 실행 방법, 결과 대조용 집계 기록(`reports/`)만** 있습니다. MIMIC-IV 원자료, 환자 단위 파생 자료
+> (코호트·전처리·분할·예측 파일), 학습된 모델 파일은 데이터 이용 협약(DUA)에 따라 올리지 않았습니다.
 > 대시보드는 **교육용 연구 모델이며 실제 진료에 사용할 수 없습니다.**
 
 ## 한눈에 보기
@@ -82,9 +82,12 @@ XGBoost 설정을 고정하고 입력 조건을 바꿔 비교했습니다.
 ## 자료와 보안
 
 - **MIMIC-IV 3.1** (PhysioNet, doi:10.13026/kpb9-mt58). 팀원 4명 모두 PhysioNet 자격 인증(CITI 교육 이수)을 받고 DUA에 서명한 뒤 사용했습니다.
-- 사용 파일(`data/raw/`에 둠): `icustays.csv`, `chartevents.csv`, `labevents.csv`, `patients.csv.gz`, `admissions.csv.gz`, `d_items.csv`, `d_labitems.csv`
+- 사용 파일(`data/raw/`에 둠): `icustays.csv`, `patients.csv.gz`, `admissions.csv.gz`, `chartevents`, `labevents`, `d_items`, `d_labitems`
+  (뒤의 네 파일은 `.csv`와 `.csv.gz` 모두 읽습니다)
 - 원자료와 환자 단위 결과는 각자의 컴퓨터의 `data/`, `results/`, `final-dashboard/outputs/`에만 저장되며 `.gitignore`로 막혀 있습니다.
 - `schemas/`에는 중간 파일의 **열 이름만** 담은 템플릿과 모델 입력 목록이 있습니다(환자 자료 없음).
+- `reports/`에는 코드가 결과를 대조하는 팀 기록 8개(교차검증 평균·표준편차, 테스트 성능, 모델 설정값, 분할 파일 해시)만 있습니다.
+  모두 집계값이며 환자 단위 행은 없습니다.
 - 대시보드는 내 컴퓨터(127.0.0.1)에서만 열리고, 인터넷 공유 링크 기능은 없습니다. 학습된 모델 파일과 대시보드 HTML도 제한 데이터로 만든 것이므로 공유하지 않습니다.
 
 ## 실행 방법
@@ -98,14 +101,18 @@ python -m venv .venv
 
 | 순서 | 명령 | 하는 일 | 시간(참고) |
 |---|---|---|---|
-| 1 | `python scripts/01_make_cohort.py` | 성인 첫 ICU 입실, 24시간 관찰, 28일 결과 확정 조건으로 코호트 생성 | 미측정 |
-| 2 | `python scripts/run_pipeline.py` | 활력징후 7종 · 혈액검사 12종 추출, 첫 24시간 변수 생성 | 약 43분 |
-| 3 | `python scripts/clean_gross_errors.py` | 명백한 기록 오류 활력징후 관측 제거(176건) | 미측정 |
-| 4 | `python scripts/split_dataset.py` | 층화 70/15/15 분할 (random_state 42) | 미측정 |
-| 5 | `python scripts/reproduce_final_icu_xgboost.py` | 최종 XGBoost 재학습과 테스트 평가 | 미측정 |
+| 1 | `python scripts/01_make_cohort.py` | 성인 첫 ICU 입실, 24시간 관찰, 28일 결과 확정 조건으로 코호트 생성 | 약 1분 |
+| 2 | `python scripts/run_pipeline.py` | 활력징후 7종 · 혈액검사 12종 추출, 첫 24시간 변수 생성 | 약 33분 |
+| 3 | `python scripts/clean_gross_errors.py` | 명백한 기록 오류 활력징후 관측 제거(176건) | 약 35초 |
+| 4 | `python scripts/split_dataset.py` | 층화 70/15/15 분할 (random_state 42) | 약 5초 |
+| 5 | `python scripts/reproduce_final_icu_xgboost.py` | 최종 XGBoost 재학습과 테스트 평가 | 약 10초 |
 
-시간은 팀원 노트북(Windows 11) 한 대에서 잰 값이며, 재지 않은 단계는 미측정으로 두었습니다.
+시간은 팀원 노트북(Windows 11) 한 대에서 잰 값입니다.
 5번까지 실행하면 테스트 4,517명에서 ROC-AUC 0.819, AP 0.580, Brier 0.131이 나옵니다.
+
+> **처음부터 다시 실행해 확인함.** 이 저장소를 새 폴더에 내려받아 새 가상환경에서 1–5번을 실행했을 때,
+> 코호트·변수·분할 파일이 팀 기록과 바이트 단위까지 같았고 테스트 성능도 소수 여섯째 자리까지 같았습니다.
+> 이어서 아래 `final-dashboard/` 스크립트를 모두 실행해 보고서·대시보드용 결과 파일 17개(표·신뢰구간·그림 포함)가 모두 같게 나오는 것을 확인했습니다.
 
 ### 개발 단계 비교 실험
 
@@ -121,12 +128,13 @@ python scripts/compare_xgboost_indicators_icu.py     # 결측 지시변수 제�
 ### 보고서 집계 · 그림 · 대시보드 (`final-dashboard/`)
 
 ```powershell
+.venv\Scripts\python -m pip install -r final-dashboard\requirements.txt   # 대시보드용 Gradio 추가
 cd final-dashboard
 ..\.venv\Scripts\python train.py                 # 최종 모델 저장 + 입력 변환 검증 (약 15초)
-..\.venv\Scripts\python report_extras.py         # 테스트 부트스트랩 95% CI, 기준별 분류표, 테스트 곡선(영어)
+..\.venv\Scripts\python report_extras.py         # 테스트 부트스트랩 95% CI, 기준별 분류표, 테스트 곡선(영어) (약 25초)
 ..\.venv\Scripts\python report_tables.py         # 대상자 특성표·제외군 비교·교차검증 ±SD·결론 숫자
-..\.venv\Scripts\python report_model_ci.py       # 세 모델 비교: 교차검증 예측 차이의 95% CI (약 2분)
-..\.venv\Scripts\python report_lactate_ci.py     # 젖산 수치 vs 측정 여부만: 교차검증 예측 차이의 95% CI (약 2.5분)
+..\.venv\Scripts\python report_model_ci.py       # 세 모델 비교: 교차검증 예측 차이의 95% CI (약 3분)
+..\.venv\Scripts\python report_lactate_ci.py     # 젖산 수치 vs 측정 여부만: 교차검증 예측 차이의 95% CI (약 2분)
 ..\.venv\Scripts\python make_schematic.py        # 연구 모식도
 ..\.venv\Scripts\python make_flowchart.py        # 코호트 선정 흐름도 (인원은 데이터에서 셈)
 ..\.venv\Scripts\python make_test_curves_ko.py   # 테스트 곡선 한국어판
