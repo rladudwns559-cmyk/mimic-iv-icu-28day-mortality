@@ -1,6 +1,7 @@
 # MIMIC-IV 제한 데이터와 환자 단위 파생 자료는 올리지 않는다
 data/
 results/
+# reports/는 막아 두고, 코드가 대조에 쓰는 집계 파일 8개만 git add -f로 올렸다(환자 단위 자료 없음)
 reports/
 final-dashboard/outputs/
 *.csv.gz
