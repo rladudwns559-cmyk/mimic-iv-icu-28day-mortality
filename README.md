@@ -54,11 +54,12 @@ cd final-dashboard
 ..\.venv\Scripts\python report_extras.py            # 부트스트랩 95% CI, 분류표, 테스트 곡선
 ..\.venv\Scripts\python report_feedback_extras.py   # 대상자 특성표·제외군 비교·교차검증 ±SD
 ..\.venv\Scripts\python make_flowchart.py           # 그림 2 코호트 흐름도 (인원은 데이터에서 셈)
+..\.venv\Scripts\python report_model_ci.py          # 세 모델 고정 설정 비교: 교차검증 예측 차이의 95% CI (약 2분)
 ..\.venv\Scripts\python report_lactate_ci.py        # 젖산 수치 vs 측정 여부만: 교차검증 예측 차이의 95% CI (약 2.5분)
 ..\.venv\Scripts\python app.py                      # 교육용 대시보드 (Gradio)
 ```
 
-`report_*.py`는 결과가 팀 기록과 같을 때만 파일을 만듭니다(최종 모델 성능은 소수 여섯째 자리까지, 젖산 비교는 폴드별 차이까지).
+`report_*.py`는 결과가 팀 기록과 같을 때만 파일을 만듭니다(최종 모델 성능은 소수 여섯째 자리까지, 젖산 비교는 폴드별 차이까지, 세 모델 비교는 폴드 평균까지. 단 로지스틱 회귀는 소수 다섯째 자리 이하 차이 허용).
 결과는 모두 `final-dashboard/outputs/`에 저장되며 환자 단위 자료는 저장하지 않습니다.
 대시보드는 **교육용 연구 모델이며 실제 진료에 사용할 수 없습니다.**
 
