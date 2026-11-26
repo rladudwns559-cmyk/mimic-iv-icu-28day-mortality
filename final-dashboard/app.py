@@ -560,21 +560,5 @@ with gr.Blocks(title="ICU 28일 사망 위험 대시보드") as demo:
 
 
 if __name__ == "__main__":
-    import argparse
-    import os
-    import secrets
-
-    ap = argparse.ArgumentParser(description="ICU 28일 사망 위험 대시보드")
-    ap.add_argument("--share", action="store_true",
-                    help="팀원 확인용 임시 인터넷 링크(비밀번호 필요)를 만든다. 확인이 끝나면 바로 끈다.")
-    args = ap.parse_args()
-    options = dict(css=CSS, theme=THEME, head=HEAD, server_name="127.0.0.1", server_port=7860)
-    if args.share:
-        # 제한 데이터로 학습한 모델이므로 공개하지 않는다: 팀원만 아는 아이디·비밀번호로 막고, 짧게만 연다.
-        user = os.environ.get("DASH_USER", "team2")
-        password = os.environ.get("DASH_PASS") or secrets.token_urlsafe(9)
-        print(f"\n[팀원 전용 접속] 아이디: {user}  비밀번호: {password}")
-        print("링크와 비밀번호는 팀원에게만 보내고, 확인이 끝나면 이 창에서 Ctrl+C로 끄세요.\n")
-        options.update(share=True, auth=(user, password),
-                       auth_message="1트랙 2팀 팀원 전용 · 교육용 연구 모델, 실제 진료에 사용할 수 없음")
-    demo.launch(**options)
+    # 제한 데이터로 학습한 모델이므로 내 컴퓨터(127.0.0.1)에서만 연다. 인터넷 공유 링크는 만들지 않는다.
+    demo.launch(css=CSS, theme=THEME, head=HEAD, server_name="127.0.0.1", server_port=7860)

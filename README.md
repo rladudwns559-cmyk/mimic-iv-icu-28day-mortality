@@ -85,7 +85,7 @@ XGBoost 설정을 고정하고 입력 조건을 바꿔 비교했습니다.
 - 사용 파일(`data/raw/`에 둠): `icustays.csv`, `chartevents.csv`, `labevents.csv`, `patients.csv.gz`, `admissions.csv.gz`, `d_items.csv`, `d_labitems.csv`
 - 원자료와 환자 단위 결과는 각자의 컴퓨터의 `data/`, `results/`, `final-dashboard/outputs/`에만 저장되며 `.gitignore`로 막혀 있습니다.
 - `schemas/`에는 중간 파일의 **열 이름만** 담은 템플릿과 모델 입력 목록이 있습니다(환자 자료 없음).
-- 대시보드는 기본적으로 내 컴퓨터(127.0.0.1)에서만 열립니다. 학습된 모델 파일과 대시보드 HTML도 제한 데이터로 만든 것이므로 공유하지 않습니다.
+- 대시보드는 내 컴퓨터(127.0.0.1)에서만 열리고, 인터넷 공유 링크 기능은 없습니다. 학습된 모델 파일과 대시보드 HTML도 제한 데이터로 만든 것이므로 공유하지 않습니다.
 
 ## 실행 방법
 
