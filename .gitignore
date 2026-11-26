@@ -1,12 +1,21 @@
 # MIMIC-IV 제한 데이터와 환자 단위 파생 자료는 올리지 않는다
 data/
 results/
+reports/
 final-dashboard/outputs/
 *.csv.gz
 *.parquet
 *.ubj
 *.pkl
 *.joblib
+
+# 환자 단위 값이 섞일 수 있는 형식은 기본으로 막는다 (열 이름만 담은 schemas/*.header.csv는 예외)
+*.csv
+!schemas/**/*.header.csv
+*.xlsx
+*.html
+assets.json
+
 .venv/
 __pycache__/
 .claude/

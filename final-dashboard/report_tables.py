@@ -1,4 +1,4 @@
-"""13주차 보고서 피드백 반영용 집계 (환자 단위 자료는 저장하지 않음).
+"""보고서 표 1·표 2(± SD)·표 5와 결론 숫자의 집계 (환자 단위 자료는 저장하지 않음).
 
 만드는 것 (outputs/report_extras/)
   exclusion_comparison.csv   제외군(24시간 관찰 미충족, 28일 결과 미확정)과 분석군 비교 + 검정
@@ -7,7 +7,7 @@
   proposal_numbers.csv       하루 입실 20명 가정 시 경보·실제 사망·오경보 인원
   check_numbers.json          보고서에 이미 적힌 숫자(간기능 결측, 카이제곱, 효과 크기)를 다시 계산해 대조
 보고서에 이미 있는 숫자와 다르면 멈춘다(assert). random 요소 없음.
-실행: ..\\.venv\\Scripts\\python report_feedback_extras.py  (MIMIC-IV 3.1 원자료와 팀 전처리 결과 필요)
+실행: ..\\.venv\\Scripts\\python report_tables.py  (MIMIC-IV 3.1 원자료와 팀 전처리 결과 필요)
 """
 import json
 from pathlib import Path
