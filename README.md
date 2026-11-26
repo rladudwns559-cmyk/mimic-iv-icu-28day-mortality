@@ -53,10 +53,11 @@ cd final-dashboard
 ..\.venv\Scripts\python train.py                    # 최종 모델 저장 + 입력 변환 검증 (약 15초)
 ..\.venv\Scripts\python report_extras.py            # 부트스트랩 95% CI, 분류표, 테스트 곡선
 ..\.venv\Scripts\python report_feedback_extras.py   # 대상자 특성표·제외군 비교·교차검증 ±SD
+..\.venv\Scripts\python report_lactate_ci.py        # 젖산 수치 vs 측정 여부만: 교차검증 예측 차이의 95% CI (약 2.5분)
 ..\.venv\Scripts\python app.py                      # 교육용 대시보드 (Gradio)
 ```
 
-`report_*.py`는 최종 모델 성능이 팀 기록과 소수 여섯째 자리까지 같을 때만 결과를 만듭니다.
+`report_*.py`는 결과가 팀 기록과 같을 때만 파일을 만듭니다(최종 모델 성능은 소수 여섯째 자리까지, 젖산 비교는 폴드별 차이까지).
 결과는 모두 `final-dashboard/outputs/`에 저장되며 환자 단위 자료는 저장하지 않습니다.
 대시보드는 **교육용 연구 모델이며 실제 진료에 사용할 수 없습니다.**
 
