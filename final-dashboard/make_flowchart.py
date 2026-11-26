@@ -1,5 +1,5 @@
-"""보고서 그림 2: 코호트 선정 흐름도. 인원은 모두 원자료·코호트 감사표·분할 파일에서 세며, 보고서 숫자와 다르면 멈춘다."""
-import glob
+"""보고서 그림 2: 코호트 선정 흐름도(한국어). 팀 요청으로 보고서 그림 1·2는 한국어로 쓴다.
+인원은 모두 원자료·코호트 감사표·분할 파일에서 세며, 보고서 숫자와 다르면 멈춘다."""
 from pathlib import Path
 
 import matplotlib
@@ -7,6 +7,9 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.patches import FancyBboxPatch
+
+plt.rcParams["font.family"] = "Malgun Gothic"
+plt.rcParams["axes.unicode_minus"] = False
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
@@ -38,12 +41,12 @@ ax.set_xlim(0, 10); ax.set_ylim(0, 7.4); ax.axis("off")
 MAIN, EXC, FINAL = ("#F2F4F7", "#BECADC"), ("#FBEFEF", "#D9A3A3"), ("#E4EEFA", "#225CAA")
 
 
-def box(x, y, w, h, title, body, style, size=12.5):
+def box(x, y, w, h, title, body, style, size=13):
     fc, ec = style
     ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.02,rounding_size=0.08", fc=fc, ec=ec, lw=1.3))
     ax.text(x + 0.15, y + h - 0.2, title, ha="left", va="top", fontsize=size, fontweight="bold", color="#172D4E")
     if body:
-        ax.text(x + 0.15, y + h - 0.55, body, ha="left", va="top", fontsize=11.5, color="#232A32", linespacing=1.35)
+        ax.text(x + 0.15, y + h - 0.56, body, ha="left", va="top", fontsize=11.5, color="#232A32", linespacing=1.4)
 
 
 def down(y0, y1):
@@ -55,26 +58,26 @@ def side(y):
     ax.annotate("", xy=(5.0, y), xytext=(4.85, y), arrowprops=dict(arrowstyle="-|>", color="#B05A5A", lw=1.2))
 
 
-box(0.2, 6.55, 4.0, 0.75, f"ICU stays in MIMIC-IV 3.1: {n_stays:,}", f"{n_first:,} patients", MAIN)
+box(0.2, 6.55, 4.0, 0.75, f"MIMIC-IV 3.1 ICU 입실 {n_stays:,}건", f"환자 {n_first:,}명", MAIN)
 side(6.0)
-box(5.0, 5.65, 4.8, 0.7, f"Excluded: not first ICU stay ({n_stays - n_first:,} stays)", None, EXC, 12)
+box(5.0, 5.65, 4.8, 0.7, f"제외: 환자별 첫 입실이 아님 ({n_stays - n_first:,}건)", None, EXC, 12.5)
 down(6.55, 5.1)
-box(0.2, 4.35, 4.0, 0.75, f"First ICU stay, adults: {n_first:,}", "age < 18 years: 0 excluded", MAIN)
+box(0.2, 4.35, 4.0, 0.75, f"성인 환자별 첫 ICU 입실 {n_first:,}명", "18세 미만으로 제외된 환자 0명", MAIN)
 side(3.85)
-box(5.0, 3.3, 4.8, 1.2, f"Excluded: not in ICU at 24 h ({n_left + n_died + n_other:,})",
-    f"left ICU at or before 24 h: {n_left:,}\ndied at or before 24 h: {n_died:,}\n"
-    f"unclear death time, no out-time, record error: {n_other}", EXC, 12)
+box(5.0, 3.25, 4.8, 1.3, f"제외: 24시간 시점에 ICU에 없음 ({n_left + n_died + n_other:,}명)",
+    f"24시간 이전·동시 퇴실 {n_left:,}명\n24시간 이전·동시 사망 {n_died:,}명\n"
+    f"사망 시각 불명확·퇴실 시각 누락·기록 오류 {n_other}명", EXC, 12.5)
 down(4.35, 2.95)
-box(0.2, 2.2, 4.0, 0.75, f"In ICU at 24 h: {n_24:,}", None, MAIN)
+box(0.2, 2.2, 4.0, 0.75, f"24시간 시점 ICU 재실 {n_24:,}명", None, MAIN)
 side(1.75)
-box(5.0, 1.15, 4.8, 1.0, f"Excluded: 28-day outcome unknown ({n_unknown:,})",
-    "no record of survival or death at day 28\n(not assumed to be alive)", EXC, 12)
+box(5.0, 1.15, 4.8, 1.0, f"제외: 28일 결과 미확정 ({n_unknown:,}명)",
+    "28일 시점 생존·사망 기록 없음\n(생존으로 간주하지 않음)", EXC, 12.5)
 down(2.2, 1.35)
-box(0.2, 0.1, 4.0, 1.25, f"Analysis cohort: {n_final:,}",
-    f"28-day deaths {deaths:,} ({deaths / n_final * 100:.1f}%)\n"
-    f"development {dev:,} (5-fold CV)\ntest {split['test'][0]:,} (deaths {split['test'][1]:,})", FINAL)
-ax.text(5.0, 0.35, "Split: stratified by 28-day death, 70 / 15 / 15, random_state 42\n(train + validation = development)",
-        fontsize=10.5, color="#555E6A", va="center")
+box(0.2, 0.1, 4.0, 1.25, f"분석 대상 {n_final:,}명",
+    f"28일 사망 {deaths:,}명 ({deaths / n_final * 100:.1f}%)\n"
+    f"개발 자료 {dev:,}명 (5겹 교차검증)\n테스트 {split['test'][0]:,}명 (사망 {split['test'][1]:,}명)", FINAL)
+ax.text(5.0, 0.38, "분할: 28일 사망 여부로 층화, 학습 70% · 검증 15% · 테스트 15%\nrandom_state 42 (학습 + 검증 = 개발 자료)",
+        fontsize=10.5, color="#555E6A", va="center", linespacing=1.5)
 fig.tight_layout(pad=0.3)
 fig.savefig(OUT, dpi=200)
 print(OUT)
