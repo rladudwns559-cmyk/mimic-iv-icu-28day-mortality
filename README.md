@@ -53,6 +53,7 @@ cd final-dashboard
 ..\.venv\Scripts\python train.py                    # 최종 모델 저장 + 입력 변환 검증 (약 15초)
 ..\.venv\Scripts\python report_extras.py            # 부트스트랩 95% CI, 분류표, 테스트 곡선
 ..\.venv\Scripts\python report_feedback_extras.py   # 대상자 특성표·제외군 비교·교차검증 ±SD
+..\.venv\Scripts\python make_flowchart.py           # 그림 2 코호트 흐름도 (인원은 데이터에서 셈)
 ..\.venv\Scripts\python report_lactate_ci.py        # 젖산 수치 vs 측정 여부만: 교차검증 예측 차이의 95% CI (약 2.5분)
 ..\.venv\Scripts\python app.py                      # 교육용 대시보드 (Gradio)
 ```
